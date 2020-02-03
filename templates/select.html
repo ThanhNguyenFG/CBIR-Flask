@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Draw a rectangle!</title>
+    <style>
+        .select {
+            text-align: center;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+        .coor {
+            border-radius: 4px;
+        }
+        .click {
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px black;
+            border-style: solid;
+            border-radius: 4px;
+            padding: 3px;
+            background-color:#ffa31a;
+            color: black;
+        }
+        .click:hover {
+            color: white;
+        }
+    </style>
+
+</head>
+    
+<body onload="init();">
+    <div class="select">
+        <canvas id="canvas"></canvas>
+        <button class="click" onclick="set_coor()">Set Coordinates</button>
+        <p id="demo"></p>
+        <form id="form" method="POST" action="{{url_for('select',filename=image_name)}}">
+            <input class="coor" id="x" name="x" type="number" value="0">
+            <input class="coor" id="y" name="y" type="number" value="0">
+            <input class="coor" id="w" name="w" type="number" value="0">
+            <input class="coor" id="h" name="h" type="number" value="0">
+            <input class="click" type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+
+<script type="text/javascript">
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var rect = {};
+    var drag = false;
+    var imageObj = null;
+    var imgWidth, imgHeight, scale;
+    var x = 0; var y = 0; var w = 0; var h = 0;
+    function init() {
+        imageObj = new Image();
+        imageObj.src = "{{url_for('send_image', filename=image_name)}}";
+        imageObj.onload = function () { 
+            imgWidth = imageObj.width;
+            var screenWidth  = window.innerWidth-100;
+            var scaleX = 1;
+            if (imgWidth > screenWidth)
+                scaleX = screenWidth/imgWidth;
+            imgHeight = imageObj.height;
+            var screenHeight = window.innerHeight-100;
+            var scaleY = 1;
+            if (imgHeight > screenHeight)
+                scaleY = screenHeight/imgHeight;
+            scale = scaleY;
+            if(scaleX < scaleY)
+                scale = scaleX;
+            if(scale < 1){
+                imgHeight = imgHeight*scale;
+                imgWidth = imgWidth*scale;          
+            }
+
+            ctx.canvas.height = imgHeight;
+            ctx.canvas.width = imgWidth;
+            ctx.drawImage(imageObj, 0, 0, imgWidth, imgHeight); 
+        };
+        canvas.addEventListener('mousedown', mouseDown, false);
+        canvas.addEventListener('mouseup', mouseUp, false);
+        canvas.addEventListener('mousemove', mouseMove, false);
+    }
+
+    function mouseDown(e) {
+        rect.startX = e.pageX - this.offsetLeft;
+        rect.startY = e.pageY - this.offsetTop;
+        drag = true;
+    }
+
+    function mouseUp() { drag = false; }
+
+    function mouseMove(e) {
+        if (drag) {
+            ctx.clearRect(0, 0, 500, 500);
+            ctx.drawImage(imageObj, 0, 0, imgWidth, imgHeight);
+            rect.w = (e.pageX - this.offsetLeft) - rect.startX;
+            rect.h = (e.pageY - this.offsetTop) - rect.startY;
+            ctx.strokeStyle = 'red';
+            ctx.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
+        }
+
+        if (rect.w < 0)
+        {
+            x = rect.startX + rect.w;
+            y = rect.scaleY + rect.h;
+            rect.w = (-1)*rect.w;
+            rect.h = (-1)*rect.h;
+            
+        } else
+        {
+            x = rect.startX;
+            y = rect.startY;
+            w = rect.w; 
+            h = rect.h;
+
+        }
+
+        x = Math.round(x/scale); y = Math.round(y/scale); w = Math.round(w/scale); h = Math.round(h/scale);
+    }
+
+    function set_coor() {
+        if (x==null) x = 0; if (y==null) y = 0; if (w==null) w = 0; if (h==null) h = 0;
+        //var result = str.link("{{url_for('select',filename=image_name)}}");
+        document.getElementById("x").value = x;
+        document.getElementById("y").value = y;
+        document.getElementById("w").value = w;
+        document.getElementById("h").value = h;
+        //document.getElementById("demo").innerHTML = result;
+    }
+
+</script>
+</body>
+</html>

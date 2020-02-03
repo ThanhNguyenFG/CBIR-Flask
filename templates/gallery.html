@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <style>
+        .container {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="{{ url_for('index') }}">Upload new image</a>
+    <div class="row">
+
+        <div class="result">
+            <h1 class="page-header">RESULT TOP 10 IMAGES</h1>
+        </div>
+        <hr>
+        {% for image_name in image_names %}
+        <div class="image">
+            <img class="img-responsive" src=" {{url_for('send_image', filename=image_name)}}">
+            <p>K={{loop.index}} &nbsp&nbsp {{image_name}} &nbsp&nbsp L2 distance = {{dists[loop.index - 1]}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

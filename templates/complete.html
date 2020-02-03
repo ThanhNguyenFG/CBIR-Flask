@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query success :D</title>
+    <style>
+        .result {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            font-weight: bold;
+            font-size: 36px;
+            color: #ffa31a;
+        }
+        .url {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="url">
+        <a class="result" href="{{ url_for('gallery') }}">Click here to view result</a>
+    </div>
+</body>
+</html>
