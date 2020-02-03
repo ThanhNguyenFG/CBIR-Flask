@@ -15,8 +15,8 @@ def queryweb(queryName, x, y, w, h, crop = True):
     # arg query
     k = int(10) # top 10 
     descriptorName = "ORB"
-    pathVD = os.path.join(pathCurr, "visualDictionary", "visualDictionary64ORB.pickle")
-    treeIndex = os.path.join(pathCurr, "ballTreeIndexes", "index_ORB_W64.pickle")
+    pathVD = os.path.join(pathCurr, "visualDictionary", "visualDictionary2ORB.pickle")
+    treeIndex = os.path.join(pathCurr, "ballTreeIndexes", "index_ORB_W2.pickle")
     
     #load the index
     with open(treeIndex, 'rb') as f:
